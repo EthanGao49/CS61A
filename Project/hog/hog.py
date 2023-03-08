@@ -67,6 +67,7 @@ def take_turn(num_rolls, opponent_score, dice=six_sided, goal=GOAL_SCORE):
     assert opponent_score < goal, 'The game should be over.'
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    return piggy_points(opponent_score) if num_rolls == 0 else roll_dice(num_rolls, dice)
     # END PROBLEM 3
 
 
@@ -107,7 +108,7 @@ def more_boar(player_score, opponent_score):
     player_leftmost_digit, player_second_leftmost_digit = leftmost_two_digit(player_score, None)
     opponent_leftmost_digit, opponent_second_leftmost_digit = leftmost_two_digit(opponent_score, None)
     return player_leftmost_digit < opponent_leftmost_digit and \
-          player_second_leftmost_digit < opponent_second_leftmost_digit
+              player_second_leftmost_digit < opponent_second_leftmost_digit
     
     # END PROBLEM 4
 
@@ -148,6 +149,20 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    while score0 < goal and score1 < goal:
+        if who == 0:
+            score0 += take_turn(strategy0(score0, score1), score1, dice, goal)
+            if more_boar(score0, score1):
+                score0 += take_turn(strategy0(score0, score1), score1, dice, goal)
+        else:
+            score1 += take_turn(strategy1(score1, score0), score0, dice, goal)
+            if more_boar(score1, score0):
+                score1 += take_turn(strategy1(score1, score0), score0, dice, goal)
+        who = next_player(who)
+    return score0, score1
+
+                    
+
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6

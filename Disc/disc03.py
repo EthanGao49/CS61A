@@ -86,6 +86,7 @@ def count_k(n, k):
     1
     """
     "*** YOUR CODE HERE ***"
+    # Caution: This version of implement don't work!
     # if n <= 1 or k == 1:
     #     return 1 
     # if k > n:
